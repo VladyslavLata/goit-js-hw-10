@@ -18,7 +18,10 @@ inputEl.addEventListener(
 );
 
 function onInputSearchCountry() {
-  fetchCountrys(inputEl.value)
+  const inputValue = inputEl.value.trim();
+
+  if (inputValue.length > 0) {
+  fetchCountrys(inputValue)
     .then(countrys => {
       if (countrys.length > 1 && countrys.length < 11) {
         clearInfo();
@@ -27,18 +30,24 @@ function onInputSearchCountry() {
         clearList();
         addCountryMarkup(countrys, countryInfoEl, countryMarkup);
       } else {
-        clearInfo();
-        clearList();
+        clearAllCountryInfo();
         Notiflix.Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
       }
     })
     .catch(error => {
+      clearAllCountryInfo();
+     Notiflix.Notify.failure("Oops, there is no country with that name");
+    });
+  } else {
+    clearAllCountryInfo();
+  }
+}
+
+function clearAllCountryInfo() {
       clearInfo();
       clearList();
-      console.log(error);
-    });
 }
 
 function clearList() {
